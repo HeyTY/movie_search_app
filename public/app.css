@@ -6,3 +6,8 @@
 	display:flex; 
 	flex-wrap: wrap;
 }
+
+#newSearchInput {
+	width: 50%;
+	margin: 35px auto;
+}
