@@ -8,17 +8,21 @@
 </form>
 
 
-<ul>
-	<% data["Search"].forEach(function(movie) { %>
-		<div>
-			<img src="<%=movie.Poster%>" alt="" height="175" width="115">
-			<strong>
-				<%= movie.Title%>
-			</strong> 
-			- (<%=movie.Year %> )
-		</div>
-	<%});%>
-</ul>
+<div id="resultsRow" class="row text-center">
+		<% data["Search"].forEach(function(movie) { %>
+			<div class="col-md-2 col-sm-6">
+				<div class="thumbnail">
+					<img src="<%=movie.Poster%>" alt="">
+					<div class="caption">
+						<strong>
+							<%= movie.Title%>
+						</strong> 
+						- (<%=movie.Year %> )
+					</div>
+				</div>
+			</div>
+		<%});%>
+</div>
 
 <a href="/">Search Again</a>
 

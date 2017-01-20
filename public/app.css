@@ -1,12 +1,8 @@
-h1 {
-	font-family: 'Roboto', sans-serif;
-	color: #222224;
-	font-weight: 700;
-	text-transform: uppercase;
+#navTop {
+	background-color: #222222;	
 }
 
-body {
-	font-family: 'Roboto', sans-serif;
-	background-color: #f0f0f0;
-	font-size: 14px;
+#resultsRow {
+	display:flex; 
+	flex-wrap: wrap;
 }
