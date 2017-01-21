@@ -63,7 +63,8 @@ app.get("/chart", function(req,res){
 		if (err) {
 			console.log(err);
 		} else {
-			res.render("topChart", {movie: allMovies})
+			// 1. key can be anything : 2. value follows above
+			res.render("topChart", {allMovies: allMovies})
 		}
 	});
 });

@@ -4,10 +4,16 @@
 <h1>YMDB TOP MOVIE CHART</h1>
 
 
-<p><%= movie.title%></p>
-<p><%= movie.year%></p>
-<p><%= movie.image%></p>
-<p><%= movie.description%></p>
+
+
+<% allMovies.forEach(function(movie) {%>
+	<p><%= movie.title%></p>
+	<p><%= movie.year%></p>
+	<img src="<%= movie.poster%>" alt="">
+	<p><%= movie.description%></p>
+<%});%>
+
+
 
 
 
