@@ -1,11 +1,20 @@
 <% include partials/header%>
 
-<h1>Movie Database API</h1>
 
-<form action="/results" method="GET">
-	<input type="text" name="search" placeholder="Enter Movie Title Here" >
-	<input type= "submit">
-</form>
+<div class="container">
+	<header class="jumbotron">
+		<div class="container">
+			<h1>Movie Database API</h1>
+			<form id="newSearchInput" action="/results" method="GET">
+				<div>	
+					<input class="form-control" type="text" name="search" placeholder="Enter Movie Title Here" >
+				</div>
+				<div class="form-group">
+					<input class="btn btn-primary btn-large btn-block" type= "submit">
+				</div>
+			</form>
+		</div>	
+	</header>
 
 
 <% include partials/footer%>

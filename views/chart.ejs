@@ -1,0 +1,32 @@
+<% include partials/header%>
+
+<div class="container">
+	<header class="jumbotron">
+		<div class="container">
+			<h1> YMDB TOP MOVIE CHART</h1>
+				<div class="form-group">
+				<a href="/chart/new"><button class="btn btn-success btn-lg btn-block" type="button">Add New Movie</button></a>
+				</div>
+			</form>
+		</div>	
+	</header>
+
+
+
+<div id="resultsRow" class="row text-center">
+	<% allMovies.forEach(function(movie) {%>
+		<div class="col-md-4 col-sm-6">
+			<div class="thumbnail">
+				<h4><strong><%= movie.title%></strong></h4>
+				<p><%= movie.year%></p>
+				<img class ="moviePoster" src="<%= movie.poster%>" alt="">
+				<p><%= movie.description%></p>
+			</div>
+		</div>
+	<%});%>
+</div>
+
+
+<% include partials/footer%>
+
+<a href="/"></a>

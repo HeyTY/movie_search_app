@@ -1,11 +1,13 @@
 var express 	= require("express"),
 	app 		= express(),
 	request 	= require("request"),
-	mongoose	= require("mongoose")
+	mongoose	= require("mongoose"),
+	bodyParser  = require("body-parser")
 
 mongoose.connect("mongodb://localhost/ymdb");
 app.use(express.static("public"));
 app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
 
 
 // SCHEMA SETUP
@@ -42,7 +44,7 @@ app.get("/", function(req, res){
 	res.render("index");
 });
 
-// RESULTS FROM SEARCH
+// INDEX HOMPAGE RESULTS FROM SEARCH
 app.get("/results", function(req, res){
 	// get data from input putting it into a variable
 	var query =  req.query.search;
@@ -56,7 +58,7 @@ app.get("/results", function(req, res){
 	});
 });
 
-// Chart - Show all Top movies
+// CHART INDEX - 
 app.get("/chart", function(req,res){
 	// Get all movies from DB
 	Movie.find({}, function(err, allMovies){
@@ -64,11 +66,26 @@ app.get("/chart", function(req,res){
 			console.log(err);
 		} else {
 			// 1. key can be anything : 2. value follows above
-			res.render("topChart", {allMovies: allMovies})
+			res.render("chart", {allMovies: allMovies})
 		}
 	});
 });
 
+// NEW ROUTE
+app.get("/chart/new", function (req, res) {
+	res.render("new");
+})
+
+// CREATE ROUTE
+app.post("/chart", function (req, res){
+	Movie.create(req.body.movie, function(err, newMovie){
+		if (err) {
+			res.render("new");
+		} else {
+			res.redirect("/chart");
+		}
+	})
+});
 
 
 
