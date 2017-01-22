@@ -58,6 +58,19 @@ app.get("/results", function(req, res){
 	});
 });
 
+// SHOW - RESULT FROM SEARCH
+app.get("/results/:id", function(req, res){
+	var url ="http://www.omdbapi.com/?i=tt3748528" 
+
+	request( url, function(error, response, body){
+		if (!error && response.statusCode === 200) {
+			var data = JSON.parse(body) 
+			res.render("showResults", {data: data});
+		}
+	});
+});
+
+
 // CHART INDEX - 
 app.get("/chart", function(req,res){
 	// Get all movies from DB
@@ -85,6 +98,17 @@ app.post("/chart", function (req, res){
 			res.redirect("/chart");
 		}
 	})
+});
+
+// SHOW ROUTE - CHART
+app.get("/chart/:id", function(req, res){
+	Movie.findById(req.params.id, function(err, foundMovie){
+		if (err) {
+			res.redirect("/chart");
+		} else {
+			res.render("showChart", {movie: foundMovie});
+		}
+	});
 });
 
 
