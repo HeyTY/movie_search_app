@@ -60,7 +60,8 @@ app.get("/results", function(req, res){
 
 // SHOW - RESULT FROM SEARCH
 app.get("/results/:id", function(req, res){
-	var url ="http://www.omdbapi.com/?i=tt3748528" 
+	var query = req.query.showSearch;
+	var url ="http://www.omdbapi.com/?i=" + query; 
 
 	request( url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
