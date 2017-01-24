@@ -8,8 +8,12 @@
 <p><%=movie.year%></p>
 <p><%=movie.description%></p>
 
-
-
+<% movie.comments.forEach(function(comment){ %>
+	<p>
+		<strong><%= comment.author %></strong>
+		- <%= comment.text %>
+	</p>
+<% }) %>
 
 <a class="btn btn-success" href="/chart">Back</a>
 <% include partials/footer%>

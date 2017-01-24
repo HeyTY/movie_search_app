@@ -2,24 +2,18 @@ var express 	= require("express"),
 	app 		= express(),
 	request 	= require("request"),
 	mongoose	= require("mongoose"),
-	bodyParser  = require("body-parser")
+	bodyParser  = require("body-parser"),
+	Movie       = require("./models/movie"),
+	Comment     = require("./models/comment"),
+	seedDB		= require("./seeds")
+
 
 mongoose.connect("mongodb://localhost/ymdb");
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+seedDB();
 
-
-// SCHEMA SETUP
-var movieSchema = new mongoose.Schema({
-	title: String,
-	year: Number,
-	poster: String,
-	description: String
-});
-
-//Create Model
-var Movie = mongoose.model("Movie", movieSchema);
 
 // Movie.create(
 // {
@@ -103,7 +97,7 @@ app.post("/chart", function (req, res){
 
 // SHOW ROUTE - CHART
 app.get("/chart/:id", function(req, res){
-	Movie.findById(req.params.id, function(err, foundMovie){
+	Movie.findById(req.params.id).populate("comments").exec(function(err, foundMovie){
 		if (err) {
 			res.redirect("/chart");
 		} else {
