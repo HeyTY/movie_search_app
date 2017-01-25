@@ -9,7 +9,7 @@ var express 	= require("express"),
 
 
 mongoose.connect("mongodb://localhost/ymdb");
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 seedDB();
@@ -37,6 +37,12 @@ seedDB();
 app.get("/", function(req, res){
 	res.render("index");
 });
+
+// PAGINATE SEARCH RESULTS
+
+
+
+
 
 // INDEX HOMPAGE RESULTS FROM SEARCH
 app.get("/results", function(req, res){
@@ -74,14 +80,14 @@ app.get("/chart", function(req,res){
 			console.log(err);
 		} else {
 			// 1. key can be anything : 2. value follows above
-			res.render("chart", {allMovies: allMovies})
+			res.render("movies/chart", {allMovies: allMovies})
 		}
 	});
 });
 
 // NEW ROUTE
 app.get("/chart/new", function (req, res) {
-	res.render("new");
+	res.render("movies/new");
 })
 
 // CREATE ROUTE
@@ -90,7 +96,7 @@ app.post("/chart", function (req, res){
 		if (err) {
 			res.render("new");
 		} else {
-			res.redirect("/chart");
+			res.redirect("movies/chart");
 		}
 	})
 });
@@ -101,10 +107,30 @@ app.get("/chart/:id", function(req, res){
 		if (err) {
 			res.redirect("/chart");
 		} else {
-			res.render("showChart", {movie: foundMovie});
+			res.render("movies/showChart", {movie: foundMovie});
 		}
 	});
 });
+
+//===========================
+//	COMMENTS ROUTE
+//===========================
+
+// NEW COMMENT FORM
+app.get("/chart/:id/comments/new", function(req, res){
+	// Find movie by ID
+
+	Movie.findById(req.params.id, function(err, movies){
+		if (err) {
+			console.log(err);
+			res.redirect("/chart");
+		} else {
+			res.render("comments/new", {movie: movie});
+		}
+	});
+});
+
+// COMMENT POST ROUTE
 
 
 
