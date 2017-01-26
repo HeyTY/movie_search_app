@@ -1,11 +1,14 @@
-var express 	= require("express"),
-	app 		= express(),
-	request 	= require("request"),
-	mongoose	= require("mongoose"),
-	bodyParser  = require("body-parser"),
-	Movie       = require("./models/movie"),
-	Comment     = require("./models/comment"),
-	seedDB		= require("./seeds")
+var express 			= require("express"),
+	app 				= express(),
+	request 			= require("request"),
+	mongoose			= require("mongoose"),
+	passport			= require("passport"),
+	LocalStrategy 		= require("passport-local"),
+	bodyParser  		= require("body-parser"),
+	Movie       		= require("./models/movie"),
+	Comment     		= require("./models/comment"),
+	User 				= require("./models/user"),
+	seedDB				= require("./seeds")
 
 
 mongoose.connect("mongodb://localhost/ymdb");
@@ -31,20 +34,40 @@ seedDB();
 // });
 
 
+//===========================
+//	PASSPORT CONFIG
+//===========================
+
+app.use(require("express-session")({
+	secret: "Link-NSX",
+	resave: false,
+	saveUninitialized: false
+
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use( new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req, res, next) {
+	res.locals.currentUser = req.user;
+	next();
+});
 
 
+
+
+
+//===========================
+//	API SEARCH
+//===========================
 
 app.get("/", function(req, res){
 	res.render("index");
 });
 
-// PAGINATE SEARCH RESULTS
-
-
-
-
-
-// INDEX HOMPAGE RESULTS FROM SEARCH
 app.get("/results", function(req, res){
 	// get data from input putting it into a variable
 	var query =  req.query.search;
@@ -86,12 +109,12 @@ app.get("/chart", function(req,res){
 });
 
 // NEW ROUTE
-app.get("/chart/new", function (req, res) {
+app.get("/chart/new",isLoggedIn , function (req, res) {
 	res.render("movies/new");
 })
 
 // CREATE ROUTE
-app.post("/chart", function (req, res){
+app.post("/chart",isLoggedIn , function (req, res){
 	Movie.create(req.body.movie, function(err, newMovie){
 		if (err) {
 			res.render("new");
@@ -117,7 +140,7 @@ app.get("/chart/:id", function(req, res){
 //===========================
 
 // NEW COMMENT FORM
-app.get("/chart/:id/comments/new", function(req, res){
+app.get("/chart/:id/comments/new", isLoggedIn, function(req, res){
 	// Find movie by ID
 
 	Movie.findById(req.params.id, function(err, movie){
@@ -132,7 +155,7 @@ app.get("/chart/:id/comments/new", function(req, res){
 
 // COMMENT POST ROUTE
 
-app.post("/chart/:id/comments", function(req, res){
+app.post("/chart/:id/comments", isLoggedIn, function(req, res){
 	// lookup movie by ID
 	Movie.findById(req.params.id, function (err, movie){
 		if (err){
@@ -152,6 +175,59 @@ app.post("/chart/:id/comments", function(req, res){
 		}
 	;})
 })
+//===========================
+//	AUTHEN ROUTE
+//===========================
+
+	// SHOW SIGN UP PAGE
+app.get("/register", function(req, res){
+	res.render("register");
+})
+	// POST SIGNUP 
+app.post("/register", function(req, res){
+	var newUser = new User({username: req.body.username});
+	User.register(newUser, req.body.password, function(err, user){
+		if (err){
+			console.log(err);
+			return res.render("/register")
+		}
+		passport.authenticate("local")(req, res, function(){
+			res.redirect("/chart");
+		});
+	});
+});
+
+
+//===========================
+//	LOGIN ROUTE
+//===========================
+
+// SHOW LOGIN FORM
+app.get("/login", function(req, res){
+	res.render("login");
+})
+
+ 
+app.post("/login", passport.authenticate("local", {
+	successRedirect: "/chart",
+	failureRedirect: "/login"
+	}),
+	function (req, res) {
+});
+
+// LOGOUT
+app.get("/logout", function(req, res){
+	req.logout();
+	res.redirect("/chart");
+});
+
+function isLoggedIn(req, res, next){
+		if(req.isAuthenticated()){
+			return next();
+		}
+		res.redirect("/login");
+}
+
 
 
 
