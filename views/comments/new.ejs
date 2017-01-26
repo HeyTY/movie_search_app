@@ -4,12 +4,12 @@
 	<div class="row">
 		<h1>Add New Comments</h1>
 		<div>
-			<form action="/chart" method="POST">
+			<form action="/chart/<%= movie._id%>/comments"  method="POST">
 				<div class="form-group">
-					<input class="form-control" type="text" name="movie[title]" placeholder="Comment">
+					<input class="form-control" type="text" name="comment[text]" placeholder="Comment">
 				</div>
 				<div class="form-group">
-					<input class="form-control" type="text" name="[year]" placeholder="Author">
+					<input class="form-control" type="text" name="comment[author]" placeholder="Author">
 				</div>
 			
 				<div class="form-group">
