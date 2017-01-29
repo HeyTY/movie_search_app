@@ -5,6 +5,7 @@ var express 			= require("express"),
 	passport			= require("passport"),
 	LocalStrategy 		= require("passport-local"),
 	bodyParser  		= require("body-parser"),
+	methodOverride		= require("method-override"),
 	Movie       		= require("./models/movie"),
 	Comment     		= require("./models/comment"),
 	User 				= require("./models/user"),
@@ -21,7 +22,8 @@ mongoose.connect("mongodb://localhost/ymdb");
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
-seedDB();
+app.use(methodOverride("_method"));
+// seedDB(); 
 
 // Passport Config
 

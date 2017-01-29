@@ -62,7 +62,7 @@ router.post("/chart",isLoggedIn , function (req, res){
 		if (err) {
 			res.render("new");
 		} else {
-			res.redirect("movies/chart");
+			res.redirect("/chart");
 		}
 	})
 });
@@ -77,6 +77,37 @@ router.get("/chart/:id", function(req, res){
 		}
 	});
 });
+
+
+// EDIT - Show Edit Page
+router.get("/chart/:id/edit", function (req, res){
+	Movie.findById(req.params.id, function(err, foundMovie){
+		res.render("movies/edit", {movie: foundMovie});
+	})
+});
+
+// UPDATE ROUTE  
+router.put("/chart/:id", function (req,res){
+	Movie.findByIdAndUpdate(req.params.id, req.body.movie, function(err, updatedmovie){
+		if(err) {
+			res.redirect("/chart");
+		} else {
+			res.redirect("/chart/" + req.params.id);
+		}
+	});
+});
+
+// DELETE ROUTE
+router.delete("/chart/:id", function (req, res){
+	Movie.findByIdAndRemove(req.params.id, function(err){
+		if (err){
+			res.redirect("/chart");
+		} else {
+			res.redirect("/chart");
+		}
+	})
+});
+
 
 // Middleware
 function isLoggedIn(req, res, next){

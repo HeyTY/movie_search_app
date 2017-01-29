@@ -29,34 +29,34 @@ var data = [
 function seedDB() {
 	//Remove all movies from DB
 	Movie.remove({}, function(err){
-		if (err) {
-			console.log(err);
-		}
-		console.log("All Movies Removed!")
-	// Add few Movies into DB
-		data.forEach(function(seed){
-			Movie.create(seed, function(err, movie){
-				if (err) {
-					console.log(err);
-				} else {
-					console.log("Added a Movie!")
-					//Create a comment
-						Comment.create(
-							{
-								text:"I saw this movie last night, it was AMAZING!!!",
-								author:"Luke Skywalker"	
-						}, function(err, comment){
-							if (err) {
-								console.log(err);
-							} else {
-								movie.comments.push(comment);
-								movie.save();
-								console.log("Created a new comment")
-							}
-						});
-				}
-			})
-		});
+	// 	if (err) {
+	// 		console.log(err);
+	// 	}
+	// 	console.log("All Movies Removed!")
+	// // Add few Movies into DB
+	// 	data.forEach(function(seed){
+	// 		Movie.create(seed, function(err, movie){
+	// 			if (err) {
+	// 				console.log(err);
+	// 			} else {
+	// 				console.log("Added a Movie!")
+	// 				//Create a comment
+	// 					Comment.create(
+	// 						{
+	// 							text:"I saw this movie last night, it was AMAZING!!!",
+	// 							author:"Luke Skywalker"	
+	// 					}, function(err, comment){
+	// 						if (err) {
+	// 							console.log(err);
+	// 						} else {
+	// 							movie.comments.push(comment);
+	// 							movie.save();
+	// 							console.log("Created a new comment")
+	// 						}
+	// 					});
+	// 			}
+	// 		})
+	// 	});
 	});
 }
 
